@@ -1,22 +1,23 @@
 CC			= gcc
 TARGET		= game
 SRCDIR 		= src
-SRC			= $(wildcard $(SRCDIR)/*.c)
-OBJDIR		= obj
-OBJ			= $(wildcard $(OBJDIR)/*.o)
+
+math		= $(wildcard $(SRCDIR)/math/*.c)
+util		= $(wildcard $(SRCDIR)/util/*.c)
+
+dungeon		= $(wildcard $(SRCDIR)/dungeon/*.c)
+
+entity		= $(wildcard $(SRCDIR)/object/entity/*.c)
+object		= $(wildcard $(SRCDIR)/object/*.c) $(entity)
+
+SRC			= $(wildcard $(SRCDIR)/*.c) $(math) $(util) $(dungeon) $(object)
+
+OBJ			= $(SRC:.c=.o)
 LIB 		= -lncurses
 
-all: comp build
-
-# compiles objects
-comp: $(SRC)
-	$(CC) -c $^ -Wall -o $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $^)
-
 # builds game objects
-build: $(OBJ)
-	$(CC) $^ $(LIB) -o $(TARGET)
-
-
+build: clean $(OBJ)
+	$(CC) $(OBJ) -o $(TARGET) $(LIB)
 
 .PHONY: clean
 clean:
