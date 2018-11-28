@@ -2,20 +2,20 @@ CC			= gcc
 TARGET		= game
 SRCDIR 		= src
 
+dungeon		= $(wildcard $(SRCDIR)/dungeon/*.c)
 math		= $(wildcard $(SRCDIR)/math/*.c)
+object		= $(wildcard $(SRCDIR)/object/*.c) $(character) $(entity)
+	character	= $(wildcard $(SRCDIR)/object/character/*.c)
+	entity		= $(wildcard $(SRCDIR)/object/entity/*.c) $(component)
+		component	= $(wildcard $(SRCDIR)/object/entity/component/*.c)
 util		= $(wildcard $(SRCDIR)/util/*.c)
 
-dungeon		= $(wildcard $(SRCDIR)/dungeon/*.c)
-
-entity		= $(wildcard $(SRCDIR)/object/entity/*.c)
-object		= $(wildcard $(SRCDIR)/object/*.c) $(entity)
-
-SRC			= $(wildcard $(SRCDIR)/*.c) $(math) $(util) $(dungeon) $(object)
+SRC			= $(wildcard $(SRCDIR)/*.c) $(dungeon) $(math) $(object) $(util)
 
 OBJ			= $(SRC:.c=.o)
 LIB 		= -lncurses
 
-# builds game objects
+# builds game
 build: clean $(OBJ)
 	$(CC) $(OBJ) -o $(TARGET) $(LIB)
 

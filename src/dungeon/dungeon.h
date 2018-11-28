@@ -3,8 +3,12 @@
 
 #include "../object/gameobject.h"
 #include "../util/bool.h"
-const int DUNGEON_WIDTH = 100;
-const int DUNGEON_HEIGHT = 20;
+#include "square.h"
+
+
+#define DUNGEON_HEIGHT 20
+#define DUNGEON_WIDTH 100
+
 
 typedef struct Dungeon
 {
