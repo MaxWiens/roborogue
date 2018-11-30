@@ -4,13 +4,14 @@ SRCDIR 		= src
 
 math		= $(wildcard $(SRCDIR)/math/*.c)
 util		= $(wildcard $(SRCDIR)/util/*.c)
+gui 		= $(wildcard $(SRCDIR)/gui/*.c)
 
 dungeon		= $(wildcard $(SRCDIR)/dungeon/*.c)
 
 entity		= $(wildcard $(SRCDIR)/object/entity/*.c)
 object		= $(wildcard $(SRCDIR)/object/*.c) $(entity)
 
-SRC			= $(wildcard $(SRCDIR)/*.c) $(math) $(util) $(dungeon) $(object)
+SRC			= $(wildcard $(SRCDIR)/*.c) $(math) $(util) $(gui) $(dungeon) $(object)
 
 OBJ			= $(SRC:.c=.o)
 LIB 		= -lncurses
