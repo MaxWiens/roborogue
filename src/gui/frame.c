@@ -14,56 +14,28 @@ Frame* new_frame(WINDOW* window, int h, int w, int y, int x)
     return frame;
 }
 
-void outline_frame(Frame* frame, Frame* overlay, char* c)
+void outline_frame(Frame* frame)
 {
-    // for (int i = 0; i <= frame->height + 1; i++)
-    // {
-    //     for (int j = 0; j <= frame->width + 1; j++)
-    //     {
-    //          if (j == 0 || j == frame->width + 1) {
-    //              mvwprintw(overlay->window, i, j, c);
-    //          }
-    //
-    //          if (i == 0 || i == frame->height + 1) {
-    //              mvwprintw(overlay->window, i, j, c);
-    //          }
-    //     }
-    // }
-
-
-
-    // wrefresh(overlay->window);
-
-    WINDOW* win = overlay->window;
-
-    // draw top border
-    for (int n = 0; n <= frame->width; n++) {
-        mvwprintw(win, -1, n, c);
-    }
-    
-    // // draw bottom border
-    // for (int n = 0; n < frame->width; n++) {
-    //     mvwprintw(win, frame->height, n, c);
-    // }
-    //
-    // // draw left border
-    // for (int n = 0; n < frame->height; n++) {
-    //     mvwprintw(win, n, 0, c);
-    // }
-    //
-    // // draw right border
-    // for (int n = 0; n < frame->height; n++) {
-    //     mvwprintw(win, n, frame->width, c);
-    // }
-
-    // wrefresh(frame->window);
-    // wrefresh(overlay->window);
+    wborder(frame->window, '|', '|', '-', '-', '+', '+', '+', '+');
+    wrefresh(frame->window);
 }
+
+/*
+// Leaving here to come back to at some point.
+void refresh_borders(Frame* frames[], int max_frame_count)
+{
+    for (int i = 0; i < max_frame_count; i++)
+    {
+        clear_frame(frames[i]);
+        outline_frame(frames[i]);
+    }
+}
+*/
 
 void print_center_frame(Frame* frame, char message[])
 {
     // wclear(frame->window);
-    mvwprintw(frame->window, 0, frame->height * 0.5, message);
+    mvwprintw(frame->window, frame->height *0.5, 2, message);
     wrefresh(frame->window);
 }
 

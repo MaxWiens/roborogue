@@ -12,16 +12,13 @@ typedef struct Frame
     int y; // y position of the frame, including offset
 }Frame;
 
-Frame* new_frame(WINDOW* window, int h, int w, int x, int y);
-void outline_frame(Frame* frame, Frame* overlay, char* c);
+
+Frame* new_frame(WINDOW* window, int h, int w, int y, int x);
+void outline_frame(Frame* frame);
+//void refresh_borders(Frame* frames[]);
+// (currently broken.)
 void print_center_frame(Frame* frame, char* message);
 void clear_frame(Frame* frame);
 
-/*
-    alert_to_window
-    Window* window: a window pointer to which we will alert the message
-    int y: y position relative to window
-    int x: x position relative to window
-*/
 
 #endif
