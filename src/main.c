@@ -89,7 +89,6 @@ int main(int argc, char const *argv[])
 			case KEY_BACKSPACE:
 
 				print_center_frame(status_frame, "[Press backspace again to quit]");
-				// outline_frame(status_frame, overlay_frame, "*");
 
 				int key = wgetch(dungeon_win);
 				if(key == KEY_BACKSPACE || key == KEY_SLEFT)

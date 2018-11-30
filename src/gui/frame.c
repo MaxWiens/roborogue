@@ -34,7 +34,6 @@ void refresh_borders(Frame* frames[], int max_frame_count)
 
 void print_center_frame(Frame* frame, char message[])
 {
-    // wclear(frame->window);
     mvwprintw(frame->window, frame->height *0.5, 2, message);
     wrefresh(frame->window);
 }
