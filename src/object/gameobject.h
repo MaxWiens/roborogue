@@ -8,7 +8,8 @@ typedef struct GameObject
 {
 	Types type;
 	char sprite;
-	Vector* position;
+	int x;
+	int y;
 	int hp;
 	char* name;
 	char* description;

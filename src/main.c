@@ -5,8 +5,8 @@
 
 int main(int argc, char const *argv[])
 {
-	const int SCREEN_WIDTH = 100;
-	const int SCREEN_HEIGHT = 20;
+	#define SCREEN_WIDTH 100
+	#define SCREEN_HEIGHT 20
 	const int SCREEN_HEIGHT_HALF = SCREEN_HEIGHT*0.5;
 	const int SCREEN_WIDTH_HALF = SCREEN_WIDTH*0.5;
 	//initialises ncurses

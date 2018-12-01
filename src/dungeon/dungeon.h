@@ -16,8 +16,9 @@ typedef struct Dungeon
 	Square squares[DUNGEON_HEIGHT][DUNGEON_WIDTH];
 }Dungeon;
 
-
-bool add_object(Dungeon* dungeon, GameObject* object);
+// bool add_object(Dungeon* dungeon, GameObject* object, int y, int x);
+// adds an object to the dungeon at a specified position
+bool add_object(Dungeon* dungeon, GameObject* object, int y, int x);
 
 Dungeon* generate(int seed, int level);
 

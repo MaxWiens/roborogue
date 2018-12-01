@@ -1,11 +1,6 @@
-#include "object/entity/entity.h"
-#include "util/bool.h"
-#include <stdlib.h>
 
-typedef struct EntityLinkedList {
-	Entity* entity;
-	struct EntityLinkedList* next;
-}EntityLinkedList;
+#include "entitylinkedlist.h"
+#include <stdlib.h>
 
 EntityLinkedList* remove_entity(EntityLinkedList* list, Entity* entity) {
 	if (list == NULL) return list;

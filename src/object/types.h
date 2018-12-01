@@ -2,7 +2,6 @@
 #define types_h
 typedef enum Types
 {
-	//
 	TypeGameObject			= 0x0000,
 
 	TypeEntity				= 0x0001,
