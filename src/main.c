@@ -57,6 +57,94 @@ int main(int argc, char const *argv[])
 		top_scr_offset = (max_scr_y - MAX_HEIGHT) / 2;
 	}
 
+
+	/* Title Screen */
+	WINDOW* title_win = newwin(MAX_HEIGHT, MAX_WIDTH, top_scr_offset, right_scr_offset);
+	Frame* title_frame = new_frame(title_win, MAX_HEIGHT, MAX_WIDTH, top_scr_offset, right_scr_offset);
+
+	keypad(title_win, true);
+	bool start_menu = true;
+
+	int splash_y = 5;
+	while (start_menu){
+		outline_frame(title_frame);
+	 //  _____       _
+	 // |  __ \     | |
+	 // | |__) |___ | |__   ___  _ __ ___   __ _ _   _  ___
+	 // |  _  // _ \| '_ \ / _ \| '__/ _ \ / _` | | | |/ _ \
+	 // | | \ \ (_) | |_) | (_) | | | (_) | (_| | |_| |  __/
+	 // |_|  \_\___/|_.__/ \___/|_|  \___/ \__, |\__,_|\___|
+	 //                                     __/ |
+	 //                                    |___/
+
+	 	// print splash screen
+
+		mvwprintw(title_frame->window, splash_y, 2,    " _____       _");
+		mvwprintw(title_frame->window, splash_y+1, 2, "|  __ \\     | |");
+		mvwprintw(title_frame->window, splash_y+2, 2, "| |__) |___ | |__   ___  _ __ ___   __ _ _   _  ___");
+		mvwprintw(title_frame->window, splash_y+3, 2, "|  _  // _ \\| '_ \\ / _ \\| '__/ _ \\ / _` | | | |/ _ \\");
+		mvwprintw(title_frame->window, splash_y+4, 2, "| | \\ \\ (_) | |_) | (_) | | | (_) | (_| | |_| |  __/");
+		mvwprintw(title_frame->window, splash_y+5, 2, "|_|  \\_\\___/|_.__/ \\___/|_|  \\___/ \\__, |\\__,_|\\___|");
+		mvwprintw(title_frame->window, splash_y+6, 2, "                                    __/ |           ");
+		mvwprintw(title_frame->window, splash_y+7, 2, "                                   |___/            ");
+
+		mvwprintw(title_frame->window, splash_y+10, 5, "Press [p] to begin.");
+
+	 	int input = wgetch(title_win);
+	 	switch (input) {
+		 	case 'p':
+		 		start_menu = false;
+				clear_frame(title_frame);
+				break;
+
+	 	}
+		wrefresh(title_win);
+	}
+	delwin(title_win);
+
+
+	/* "Log-IN" screen. */
+	/*char username[20]; // this shall be used to form the seed
+	WINDOW* login_win = newwin(MAX_HEIGHT, MAX_WIDTH, top_scr_offset, right_scr_offset);
+	Frame* login_frame = new_frame(login_win, MAX_HEIGHT, MAX_WIDTH, top_scr_offset, right_scr_offset);
+
+	keypad(login_win, true);
+	bool login_menu = true;
+
+	int login_y = 10;
+	// while (login_menu) {
+	outline_frame(login_frame);
+
+	mvwprintw(login_frame->window,login_y, 2, "Enter a seed: ");
+	mvwprintw(login_frame->window,login_y+1, 2, "roboshell>");
+	wrefresh(login_frame->window);
+
+	nodelay(stdscr, true);
+	wgetstr(login_frame->window, username);
+	mvwprintw(login_frame->window, login_y+2, 2, "Welcome %s", username);
+	wmove(login_frame->window, login_y+2, 20);
+
+	clear_frame(login_frame);
+	outline_frame(login_frame);
+	wrefresh(login_frame->window);
+	while (login_menu) {
+		mvwprintw(login_frame->window, login_y, 2, "Press [p] to play.");
+
+		int input  = wgetch(login_frame->window);
+		switch (input) {
+			case 'p':
+				clear_frame(login_frame);
+				login_menu = false;
+				break;
+			}
+		wrefresh(login_frame->window);
+		}
+
+	delwin(login_win);*/
+
+	// Leaving out "log in" system for now.
+
+
 	// create windows
 	WINDOW* dungeon_win = newwin(DUNGEON_WIN_HEIGHT, DUNGEON_WIN_WIDTH, top_scr_offset, right_scr_offset);
 	WINDOW* status_win = newwin(STATUS_WIN_HEIGHT, STATUS_WIN_WIDTH, top_scr_offset + DUNGEON_WIN_HEIGHT, right_scr_offset);
@@ -69,9 +157,9 @@ int main(int argc, char const *argv[])
 	Frame* inventory_frame = new_frame(inventory_win, INVENTORY_WIN_HEIGHT, INVENTORY_WIN_WIDTH, top_scr_offset, right_scr_offset + DUNGEON_WIN_WIDTH);
 	Frame* info_frame = new_frame(info_win, INFO_WIN_HEIGHT, INFO_WIN_WIDTH, top_scr_offset + INVENTORY_WIN_HEIGHT, right_scr_offset + STATUS_WIN_WIDTH);
 
-	keypad(dungeon_win, true);
+	/* Game Logic */
 
-	// game logic
+	keypad(dungeon_win, true);
 	bool exit = false;
 	while(!exit){
 
