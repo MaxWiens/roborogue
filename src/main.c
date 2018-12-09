@@ -1,5 +1,4 @@
 #include <stdio.h>
-// #inculde <unistd.h>
 #include "util/bool.h"
 #include "gui/frame.h"
 #include <ncurses.h>
