@@ -2,6 +2,15 @@
 #include "util/bool.h"
 #include "gui/frame.h"
 #include <ncurses.h>
+#include <stdlib.h>
+#include<time.h>
+
+//debug
+#include "collections/linkedlist.h"
+#include "dungeon/generate.h"
+#include "dungeon/dungeon.h"
+//end debug
+
 
 #define DUNGEON_WIN_WIDTH 100
 #define DUNGEON_WIN_HEIGHT 25
@@ -35,6 +44,10 @@
 
 int main(int argc, char const *argv[])
 {
+	#define SCREEN_WIDTH 100
+	#define SCREEN_HEIGHT 20
+	const int SCREEN_HEIGHT_HALF = SCREEN_HEIGHT*0.5;
+	const int SCREEN_WIDTH_HALF = SCREEN_WIDTH*0.5;
 	//initialises ncurses
 	initscr();
 	raw();
@@ -156,6 +169,24 @@ int main(int argc, char const *argv[])
 	Frame* status_frame = new_frame(status_win, STATUS_WIN_HEIGHT, STATUS_WIN_WIDTH, top_scr_offset + DUNGEON_WIN_HEIGHT, right_scr_offset);
 	Frame* inventory_frame = new_frame(inventory_win, INVENTORY_WIN_HEIGHT, INVENTORY_WIN_WIDTH, top_scr_offset, right_scr_offset + DUNGEON_WIN_WIDTH);
 	Frame* info_frame = new_frame(info_win, INFO_WIN_HEIGHT, INFO_WIN_WIDTH, top_scr_offset + INVENTORY_WIN_HEIGHT, right_scr_offset + STATUS_WIN_WIDTH);
+
+	//debug
+	srand(time(0));
+
+
+	Dungeon* dungeon = generate(1);
+	char arr[DUNGEON_HEIGHT][DUNGEON_WIDTH];
+
+	print_dungeon(dungeon, arr);
+
+	for (int y = 0; y < DUNGEON_HEIGHT; ++y) {
+		for (int x = 0; x < DUNGEON_WIDTH; ++x) {
+			mvwprintw(win,y,x, "%c", arr[y][x]);
+			wrefresh(win);
+		}
+	}
+	//end debug
+
 
 	/* Game Logic */
 

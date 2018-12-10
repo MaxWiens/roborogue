@@ -2,14 +2,15 @@
 #define gameobject_h
 
 #include "types.h"
-#include "../math/vector.h"
 
 typedef struct GameObject
 {
 	Types type;
 	char sprite;
-	Vector* position;
+	int x;
+	int y;
 	int hp;
+	int maxHP;
 	char* name;
 	char* description;
 }GameObject;

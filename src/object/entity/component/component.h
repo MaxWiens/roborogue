@@ -1,15 +1,18 @@
 #ifndef component_h
 #define component_h
 
-typedef bool (*component_use_function)(Component*);
-typedef bool (*component_passive_function)(Component*);
-
+#include "../../gameobject.h"
+#include "../../../util/bool.h"
 typedef struct Component
 {
-	Entity base;
+	GameObject base;
 	int powerUse;
-	component_use_function use;
-	component_passive_function passive;
+	int power;
+	int armor;
+	int procSpeed;
+	int speed;
+	bool (*use)(struct Component*);
+	bool (*passive)(struct Component*);
 }Component;
 
 #endif//component_h

@@ -3,18 +3,26 @@
 
 #include "../object/gameobject.h"
 #include "../util/bool.h"
-const int DUNGEON_WIDTH = 100;
-const int DUNGEON_HEIGHT = 20;
+#include "square.h"
+
+
+#define DUNGEON_HEIGHT 20
+#define DUNGEON_WIDTH 100
+
 
 typedef struct Dungeon
 {
 	int level;
 	Square squares[DUNGEON_HEIGHT][DUNGEON_WIDTH];
+
 }Dungeon;
 
+// bool add_object(Dungeon* dungeon, GameObject* object, int y, int x);
+// adds an object to the dungeon at a specified position
+bool add_object(Dungeon* dungeon, GameObject* object, int y, int x);
 
-bool add_object(Dungeon* dungeon, GameObject* object);
+bool move_object(Dungeon* dungeon, GameObject* object, int y, int x);
 
-Dungeon* generate(int seed, int level);
+void print_dungeon(Dungeon* dungeon, char arr[DUNGEON_HEIGHT][DUNGEON_WIDTH]);
 
 #endif//dungeon_h
