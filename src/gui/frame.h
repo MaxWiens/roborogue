@@ -17,6 +17,9 @@ Frame* new_frame(WINDOW* window, int h, int w, int y, int x);
 void outline_frame(Frame* frame);
 //void refresh_borders(Frame* frames[]);
 // (currently broken.)
+
+// this should only be used with the info_win/info_frame
+void print_player_info(Frame* frame, char* message, int pos);
 void print_center_frame(Frame* frame, char* message);
 void clear_frame(Frame* frame);
 

@@ -18,11 +18,11 @@
 #define STATUS_WIN_WIDTH 100
 #define STATUS_WIN_HEIGHT 5
 
-#define INVENTORY_WIN_WIDTH 50
-#define INVENTORY_WIN_HEIGHT 15
+//#define INVENTORY_WIN_WIDTH 50
+//#define INVENTORY_WIN_HEIGHT 15
 
 #define INFO_WIN_WIDTH 50
-#define INFO_WIN_HEIGHT 15
+#define INFO_WIN_HEIGHT 30
 
 /* IMPORTANT NOTE: For an ideal experience, this assumes the user's window
 				   is at least 150 x 30. */
@@ -161,14 +161,14 @@ int main(int argc, char const *argv[])
 	// create windows
 	WINDOW* dungeon_win = newwin(DUNGEON_WIN_HEIGHT, DUNGEON_WIN_WIDTH, top_scr_offset, right_scr_offset);
 	WINDOW* status_win = newwin(STATUS_WIN_HEIGHT, STATUS_WIN_WIDTH, top_scr_offset + DUNGEON_WIN_HEIGHT, right_scr_offset);
-	WINDOW* inventory_win = newwin(INVENTORY_WIN_HEIGHT, INVENTORY_WIN_WIDTH, top_scr_offset, right_scr_offset + DUNGEON_WIN_WIDTH);
-	WINDOW* info_win = newwin(INFO_WIN_HEIGHT, INFO_WIN_WIDTH, top_scr_offset + INVENTORY_WIN_HEIGHT, right_scr_offset + STATUS_WIN_WIDTH);
+	//WINDOW* inventory_win = newwin(INVENTORY_WIN_HEIGHT, INVENTORY_WIN_WIDTH, top_scr_offset, right_scr_offset + DUNGEON_WIN_WIDTH);
+	WINDOW* info_win = newwin(INFO_WIN_HEIGHT, INFO_WIN_WIDTH, top_scr_offset, right_scr_offset + STATUS_WIN_WIDTH);
 
 	// create frames for the windows
 	Frame* dungeon_frame = new_frame(dungeon_win, DUNGEON_WIN_HEIGHT, DUNGEON_WIN_WIDTH, top_scr_offset, right_scr_offset);
 	Frame* status_frame = new_frame(status_win, STATUS_WIN_HEIGHT, STATUS_WIN_WIDTH, top_scr_offset + DUNGEON_WIN_HEIGHT, right_scr_offset);
-	Frame* inventory_frame = new_frame(inventory_win, INVENTORY_WIN_HEIGHT, INVENTORY_WIN_WIDTH, top_scr_offset, right_scr_offset + DUNGEON_WIN_WIDTH);
-	Frame* info_frame = new_frame(info_win, INFO_WIN_HEIGHT, INFO_WIN_WIDTH, top_scr_offset + INVENTORY_WIN_HEIGHT, right_scr_offset + STATUS_WIN_WIDTH);
+	//Frame* inventory_frame = new_frame(inventory_win, INVENTORY_WIN_HEIGHT, INVENTORY_WIN_WIDTH, top_scr_offset, right_scr_offset + DUNGEON_WIN_WIDTH);
+	Frame* info_frame = new_frame(info_win, INFO_WIN_HEIGHT, INFO_WIN_WIDTH, top_scr_offset, right_scr_offset + STATUS_WIN_WIDTH);
 
 	//debug
 	srand(time(0));
@@ -192,17 +192,33 @@ int main(int argc, char const *argv[])
 
 	keypad(dungeon_win, true);
 	bool exit = false;
+	int pos = 1;
 	while(!exit){
+
+		if (pos > info_frame->height - 1) {
+			pos = 1;
+			clear_frame(info_frame);
+		}
 
 		//outline every window frame
 		outline_frame(dungeon_frame);
 		outline_frame(status_frame);
-		outline_frame(inventory_frame);
+		// outline_frame(inventory_frame);
 		outline_frame(info_frame);
 
 		int input = wgetch(dungeon_win);
 
 		switch(input){
+
+			case 't':
+				print_player_info(info_frame, "You hit a wall.", pos);
+				pos++;
+				break;
+			case 'y':
+				print_player_info(info_frame, "You walk past dirt.", pos);
+				pos++;
+				break;
+
 			//escape is pressed
 			case KEY_SLEFT:
 			case KEY_BACKSPACE:

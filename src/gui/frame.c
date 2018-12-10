@@ -32,6 +32,19 @@ void refresh_borders(Frame* frames[], int max_frame_count)
 }
 */
 
+void print_player_info(Frame* frame, char message[], int pos)
+{
+    // if (pos > frame->height) {
+    //     wclear(frame->window)
+    //     pos = 1;
+    //     wrefresh(frame->window);
+    // }
+
+    mvwprintw(frame->window, pos, 1, message);
+    wrefresh(frame->window);
+    wmove(frame->window, pos, 1);
+}
+
 void print_center_frame(Frame* frame, char message[])
 {
     mvwprintw(frame->window, frame->height *0.5, 2, message);
