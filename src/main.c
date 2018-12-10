@@ -1,7 +1,14 @@
 #include <stdio.h>
 #include "util/bool.h"
 #include <ncurses.h>
+#include <stdlib.h>
+#include<time.h>
 
+//debug
+#include "collections/linkedlist.h"
+#include "dungeon/generate.h"
+#include "dungeon/dungeon.h"
+//end debug
 
 int main(int argc, char const *argv[])
 {
@@ -17,6 +24,26 @@ int main(int argc, char const *argv[])
 	WINDOW* win = newwin(SCREEN_HEIGHT, SCREEN_WIDTH, 0, 0);
 	keypad(win, true);
 	WINDOW* messageBox = newwin(1, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
+
+
+
+
+	//debug
+	srand(time(0));
+	char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH];
+	leafing_algorithm(tileMap);
+
+	//wprintw(win, "%s", tileMap[0]);
+	for (int y = 0; y < DUNGEON_HEIGHT; ++y) {
+		for (int x = 0; x < DUNGEON_WIDTH; ++x) {
+			mvwprintw(win,y,x, "%c", tileMap[y][x]);
+			wrefresh(win);
+		}
+	}
+	//end debug
+
+
+
 
 	bool exit = false;
 	while(!exit){

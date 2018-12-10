@@ -9,8 +9,9 @@ object		= $(wildcard $(SRCDIR)/object/*.c) $(character) $(entity)
 	entity		= $(wildcard $(SRCDIR)/object/entity/*.c) $(component)
 		component	= $(wildcard $(SRCDIR)/object/entity/component/*.c)
 util		= $(wildcard $(SRCDIR)/util/*.c)
+collections = $(wildcard $(SRCDIR)/collections/*.c)
 
-SRC			= $(wildcard $(SRCDIR)/*.c) $(dungeon) $(math) $(object) $(util)
+SRC			= $(wildcard $(SRCDIR)/*.c) $(dungeon) $(math) $(object) $(util) $(collections)
 
 OBJ			= $(SRC:.c=.o)
 LIB 		= -lncurses

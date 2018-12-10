@@ -1,14 +1,14 @@
 #ifndef square_h
 #define square_h
 
-#include "../object/tile.h"
-#include "../entitylinkedlist.h"
+#include "../object/tile/tile.h"
+#include "../collections/linkedlist.h"
 #include "../object/character/character.h"
 
 typedef struct Square
 {
 	Tile* tile;
-	EntityLinkedList* entities;
+	LinkedList* entities;
 	Character* character;
 }Square;
 

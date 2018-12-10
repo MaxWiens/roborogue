@@ -1,8 +1,8 @@
 #ifndef position_h
 #define position_h
-typedef struct Vector
+typedef struct Position
 {
 	int x;
 	int y;
-}Vector;
+}Position;
 #endif//position_h

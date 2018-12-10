@@ -1,8 +1,8 @@
 #ifndef tile_h
 #define tile_h
 
-#include "gameobject.h"
-#include "../util/bool.h"
+#include "../gameobject.h"
+#include "../../util/bool.h"
 
 typedef struct Tile
 {

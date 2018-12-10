@@ -2,7 +2,6 @@
 #define gameobject_h
 
 #include "types.h"
-#include "../math/vector.h"
 
 typedef struct GameObject
 {
