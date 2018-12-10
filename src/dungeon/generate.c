@@ -1,11 +1,10 @@
 #include "generate.h"
 
 #include "../collections/linkedlist.h"
-#include "../collections/tuple.h"
+#include "dungeon.h"
+#include "square.h"
+#include "../object/tile/tile.h"
 #include <stdlib.h>
-//debug
-#include <stdio.h>
-//end debug
 #define LEAFING_EDGE_PERCENT 0.25
 #define MIN_ROOM_LENGTH 3
 #define MAX_ROOM_LENGTH 16
@@ -18,7 +17,8 @@ typedef struct Box {
 	int height;
 }Box;
 
-void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
+Dungeon* generate(int level) {
+	char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH];
 
 	// populates tileMap
 	for (int y = 0; y < DUNGEON_HEIGHT; ++y) {
@@ -105,6 +105,8 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 			push_item(list, super);
 		}
 	}
+	free_LinkedList(q);
+
 
 	int leafCount = get_count(list);
 	// converts the leaves to rooms
@@ -158,10 +160,10 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 
 			// places path in tileMap
 			if(diffx > 0){
-				for (int i = center2x; i <= center1x+1; ++i)
+				for (int i = center2x; i <= center1x; ++i)
 					tileMap[pathy][i] = '.';
 			}else{
-				for (int i = center1x; i <= center2x+1; ++i)
+				for (int i = center1x; i <= center2x; ++i)
 					tileMap[pathy][i] = '.';
 			}
 		}else if (room1->y >= room2->y && room2->y+room2->height >= room1->y){
@@ -172,10 +174,10 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 
 			// places path in tileMap
 			if(diffx > 0){
-				for (int i = center2x; i <= center1x+1; ++i)
+				for (int i = center2x; i <= center1x; ++i)
 					tileMap[pathy][i] = '.';
 			}else{
-				for (int i = center1x; i <= center2x+1; ++i)
+				for (int i = center1x; i <= center2x; ++i)
 					tileMap[pathy][i] = '.';
 			}
 		}else if(room1->x <= room2->x && room1->x+room1->width >= room2->x){
@@ -185,10 +187,10 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 			if(range != 0) pathx += rand()%range;
 			// places path in tileMap
 			if(diffy > 0){
-				for (int i = center2y; i <= center1y+1; ++i)
+				for (int i = center2y; i <= center1y; ++i)
 					tileMap[i][pathx] = '.';
 			}else{
-				for (int i = center1y; i <= center2y+1; ++i)
+				for (int i = center1y; i <= center2y; ++i)
 					tileMap[i][pathx] = '.';
 			}
 		}else if(room1->x >= room2->x && room2->x+room2->width >= room1->x){
@@ -198,24 +200,23 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 			if(range != 0) pathx += rand()%range;
 			// places path in tileMap
 			if(diffy > 0){
-				for (int i = center2y; i <= center1y+1; ++i)
+				for (int i = center2y; i <= center1y; ++i)
 					tileMap[i][pathx] = '.';
 			}else{
-				for (int i = center1y; i <= center2y+1; ++i)
+				for (int i = center1y; i <= center2y; ++i)
 					tileMap[i][pathx] = '.';
 			}
 		}
 		else{
-
 			// room2 is diagnal from room 1 hek
 			if(rand()%2) {
 				// will place vertical first
 				if(diffy > 0){
 					for (int i = center2y; i <= center1y; ++i)
-						tileMap[i][center1y] = '.';
+						tileMap[i][center1x] = '.';
 				}else{
 					for (int i = center1y; i <= center2y; ++i)
-						tileMap[i][center1y] = '.';
+						tileMap[i][center1x] = '.';
 				}
 
 				if(diffx > 0){
@@ -237,18 +238,58 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 
 				if(diffy > 0){
 					for (int i = center2y; i <= center1y; ++i)
-						tileMap[i][center1y] = '.';
+						tileMap[i][center1x] = '.';
 				}else{
 					for (int i = center1y; i <= center2y; ++i)
-						tileMap[i][center1y] = '.';
+						tileMap[i][center1x] = '.';
 				}
 
 			}
 		}
 		room1 = room2;
 	}
-
-	free_LinkedList(q);
 	free_LinkedList(list);
 
+
+
+	// DUNGEON CREATION
+	Dungeon* dungeon = malloc(sizeof(Dungeon));
+
+	dungeon->level = level;
+	for (int y = 0; y < DUNGEON_HEIGHT; ++y) {
+		for (int x = 0; x < DUNGEON_WIDTH; ++x) {
+
+			Tile* tile = NULL;
+			switch(tileMap[y][x]) {
+
+				case'#': // wall
+					tile = new_wall(x,y);
+					break;
+				case'.': // floor
+				default:
+					tile = new_floor(x,y);
+					break;
+			}
+
+			/* MONSER SPAWN CODE
+			if(rand()%){
+
+			}*/
+			Character* character = NULL;
+
+			/* ITEM SPAWN CODE
+			if(rand()%){
+
+			}*/
+			LinkedList* entities = new_LinkedList();
+
+			Square square = {tile, entities, character};
+
+			dungeon->squares[y][x] = square;
+		}
+	}
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	//!!!ENTERENCE AND EXIT CODE!!!
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	return dungeon;
 }

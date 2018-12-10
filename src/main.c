@@ -30,16 +30,18 @@ int main(int argc, char const *argv[])
 
 	//debug
 	srand(time(0));
-	char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH];
-	leafing_algorithm(tileMap);
 
-	//wprintw(win, "%s", tileMap[0]);
+
+	Dungeon* dungeon = generate(1);
+	char arr[DUNGEON_HEIGHT][DUNGEON_WIDTH];
+
+	print_dungeon(dungeon, arr);
+
 	for (int y = 0; y < DUNGEON_HEIGHT; ++y) {
 		for (int x = 0; x < DUNGEON_WIDTH; ++x) {
-			mvwprintw(win,y,x, "%c", tileMap[y][x]);
+			mvwprintw(win,y,x, "%c", arr[y][x]);
 			wrefresh(win);
 		}
-
 	}
 	//end debug
 

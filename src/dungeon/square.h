@@ -11,6 +11,4 @@ typedef struct Square
 	LinkedList* entities;
 	Character* character;
 }Square;
-
-Square* new_square();
 #endif//square_h

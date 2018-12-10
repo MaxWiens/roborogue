@@ -12,4 +12,6 @@ typedef struct Tile
 
 Tile* new_wall(int x, int y);
 
+Tile* new_floor(int x, int y);
+
 #endif

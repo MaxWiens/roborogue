@@ -14,7 +14,5 @@ typedef enum Types
 	TypeTile				= 0x0080,
 		TypeFloor			= 0x0100|TypeTile,
 		TypeWall			= 0x0200|TypeTile,
-
-
 }Types;
 #endif//types_h

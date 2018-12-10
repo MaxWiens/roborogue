@@ -10,6 +10,7 @@ typedef struct GameObject
 	int x;
 	int y;
 	int hp;
+	int maxHP;
 	char* name;
 	char* description;
 }GameObject;

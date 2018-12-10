@@ -29,3 +29,13 @@ bool add_object(Dungeon* dungeon, GameObject* object, int y, int x) {
 	return false;
 }
 
+void print_dungeon(Dungeon* dungeon, char arr[DUNGEON_HEIGHT][DUNGEON_WIDTH]){
+	for (int y = 0; y < DUNGEON_HEIGHT; ++y)
+	{
+		for (int x = 0; x < DUNGEON_WIDTH; ++x)
+		{
+			//if(dungeon->squares[y][x].tile != NULL)
+			arr[y][x] = dungeon->squares[y][x].tile->base.sprite;
+		}
+	}
+}

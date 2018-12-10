@@ -21,6 +21,8 @@ typedef struct Dungeon
 // adds an object to the dungeon at a specified position
 bool add_object(Dungeon* dungeon, GameObject* object, int y, int x);
 
-char* print_dungeon(Dungeon* dungeon);
+bool move_object(Dungeon* dungeon, GameObject* object, int y, int x);
+
+void print_dungeon(Dungeon* dungeon, char arr[DUNGEON_HEIGHT][DUNGEON_WIDTH]);
 
 #endif//dungeon_h
