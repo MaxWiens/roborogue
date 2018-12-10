@@ -2,7 +2,8 @@ CC			= gcc
 TARGET		= game
 SRCDIR 		= src
 
-SRC			= $(wildcard $(SRCDIR)/*.c) $(collections) $(dungeon) $(object) $(util)
+SRC			= $(wildcard $(SRCDIR)/*.c) $(collections) $(dungeon) $(object) $(util) $(gui)
+  gui 		= $(wildcard $(SRCDIR)/gui/*.c)
 	collections = $(wildcard $(SRCDIR)/collections/*.c)
 	dungeon		= $(wildcard $(SRCDIR)/dungeon/*.c)
 	object		= $(wildcard $(SRCDIR)/object/*.c) $(character) $(entity) $(tile)
@@ -12,6 +13,7 @@ SRC			= $(wildcard $(SRCDIR)/*.c) $(collections) $(dungeon) $(object) $(util)
 			item		= $(wildcard $(SRCDIR)/object/entity/item/*.c)
 		tile		= $(wildcard $(SRCDIR)/object/tile/*.c)
 	util		= $(wildcard $(SRCDIR)/util/*.c)
+
 
 OBJ			= $(SRC:.c=.o)
 LIB 		= -lncurses
