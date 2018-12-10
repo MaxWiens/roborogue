@@ -3,9 +3,14 @@
 #include "../collections/linkedlist.h"
 #include "../collections/tuple.h"
 #include <stdlib.h>
+//debug
+#include <stdio.h>
+//end debug
 #define LEAFING_EDGE_PERCENT 0.25
+#define MIN_ROOM_LENGTH 3
 #define MAX_ROOM_LENGTH 16
 #define MAX_LEAF_LENGTH MAX_ROOM_LENGTH+2
+#define MIN_LEAF_LENGTH 12
 typedef struct Box {
 	int x;
 	int y;
@@ -24,51 +29,51 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 
 	LinkedList* list = new_LinkedList();
 	LinkedList* q = new_LinkedList();
-	Box* init = malloc(sizeof(Box));
-	Box b = {0,0,DUNGEON_WIDTH,DUNGEON_HEIGHT};
-	*init = b;
-	enqueue_item(q, init);
-
+	Box* init_ptr = malloc(sizeof(Box));
+	Box init = {0,0,DUNGEON_WIDTH,DUNGEON_HEIGHT};
+	*init_ptr = init;
+	enqueue_item(q, init_ptr);
+	int flipflop = rand()%2;
 	// creates leaves
 	while(get_count(q) != 0){
 		Box* super = pop_item(q);
 
-		int s = rand();
-
-		if(super->width > MAX_LEAF_LENGTH && super->height > MAX_LEAF_LENGTH){
-			if(s%2 == 1) {
+		if(super->width > MIN_LEAF_LENGTH && super->height > MIN_LEAF_LENGTH){
+			if(flipflop) {
 				// horizontal
-				int widthLeft = s%((int)(super->width*LEAFING_EDGE_PERCENT))+super->width*(LEAFING_EDGE_PERCENT*0.5);
+				int widthLeft = super->width/4+rand()%(super->width/4);//+super->width/8;
 				int widthRight = super->width-widthLeft;
 
 				Box* subLeft = malloc(sizeof(Box));
 				Box* subRight = malloc(sizeof(Box));
-				Box lb = {super->x,				super->y, 	widthLeft,	super->height};
+				Box lb = {super->x,	super->y, 	widthLeft,	super->height};
 				Box rb = {super->x+widthLeft, 	super->y, 	widthRight,	super->height};
-				*subLeft = 	lb;
+				*subLeft = lb;
 				*subRight = rb;
 
 				enqueue_item(q, subLeft);
 				enqueue_item(q, subRight);
+				flipflop = 0;
 			}else{
 				// vertical
-				int heightUp = s%((int)(super->height*0.25))+super->height*(LEAFING_EDGE_PERCENT*0.5);
+				int heightUp = super->height/4+rand()%(super->height/4);//+super->height/8;
 				int heightDown = super->height-heightUp;
 
 				Box* subUp = malloc(sizeof(Box));
 				Box* subDown = malloc(sizeof(Box));
 				Box ub = {super->x,	super->y, 			super->width,	heightUp};
-				Box db = {super->x, 	super->y+heightUp, 	super->width,	heightDown};
+				Box db = {super->x, super->y+heightUp, 	super->width,	heightDown};
 				*subUp = ub;
-				*subDown = ub;
+				*subDown = db;
 
 				enqueue_item(q, subUp);
 				enqueue_item(q, subDown);
+				flipflop = 1;
 			}
 			free(super);
-		}else if(super->width > MAX_ROOM_LENGTH){
+		}else if(super->width > MIN_LEAF_LENGTH){
 			//horizontal
-			int widthLeft = s%((int)(super->width*LEAFING_EDGE_PERCENT))+super->width*(LEAFING_EDGE_PERCENT*0.5);
+			int widthLeft = super->width/4+rand()%(super->width/4);//+super->width/8;
 			int widthRight = super->width-widthLeft;
 
 			Box* subLeft = malloc(sizeof(Box));
@@ -81,17 +86,17 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 			enqueue_item(q, subLeft);
 			enqueue_item(q, subRight);
 			free(super);
-		}else if(super->height > MAX_ROOM_LENGTH){
+		}else if(super->height > MIN_LEAF_LENGTH){
 			//vertical
-			int heightUp = s%((int)(super->height*0.25))+super->height*(LEAFING_EDGE_PERCENT*0.5);
+			int heightUp = super->height/4+rand()%(super->height/4);//+super->height/8;
 			int heightDown = super->height-heightUp;
 
 			Box* subUp = malloc(sizeof(Box));
 			Box* subDown = malloc(sizeof(Box));
 			Box ub = {super->x,	super->y, 			super->width,	heightUp};
-			Box rb = {super->x, super->y+heightUp, 	super->width,	heightDown};
+			Box db = {super->x, super->y+heightUp, 	super->width,	heightDown};
 			*subUp = ub;
-			*subDown = rb;
+			*subDown = db;
 
 			enqueue_item(q, subUp);
 			enqueue_item(q, subDown);
@@ -105,12 +110,24 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 	// converts the leaves to rooms
 	for (int i = 0; i < leafCount; ++i) {
 		Box* leaf = pop_item(list);
-		int newWidth = rand()%leaf->width;
-		int newHeight = rand()%leaf->height;
-		leaf->x += rand()%(leaf->width-newWidth);
-		leaf->y += rand()%(leaf->height-newHeight);
+		if(leaf->width < MIN_ROOM_LENGTH || leaf->height < MIN_ROOM_LENGTH){
+			free(leaf);
+			continue;
+		}
+		int newWidth = leaf->width;
+		int newHeight = leaf->height;
+		if(leaf->width > MIN_ROOM_LENGTH){
+			newWidth = MIN_ROOM_LENGTH+rand()%(leaf->width-MIN_ROOM_LENGTH);
+			leaf->x += rand()%(leaf->width-newWidth);
+		}
+		if(leaf->height > MIN_ROOM_LENGTH){
+			newHeight = MIN_ROOM_LENGTH+rand()%(leaf->height-MIN_ROOM_LENGTH);
+			leaf->y += rand()%(leaf->height-newHeight);
+		}
 		leaf->width = newWidth;
 		leaf->height = newHeight;
+
+		// puts rooms in char array
 		for (int y = leaf->y; y < leaf->height+leaf->y; ++y) {
 			for(int x = leaf->x; x < leaf->width+leaf->x; ++x) {
 				tileMap[y][x] = '.';
@@ -119,77 +136,118 @@ void leafing_algorithm(char tileMap[DUNGEON_HEIGHT][DUNGEON_WIDTH]) {
 		enqueue_item(list,leaf);
 	}
 
-	// puts rooms in char array
-	/*LinkedListIterator* iter = new_Iterator(list);
-	while(!end(iter)) {
-		Box* box = next(iter);
-		for (int y = box->y; y < box->height+box->y; ++y) {
-			for(int x = box->x; x < box->width+box->x; ++x) {
-				tileMap[y][x] = '.';
-			}
-		}
-	}
-	free_Iterator(iter);*/
 
-	/*
 	Box* room1 = pop_item(list);
 	// finding where paths between rooms should be
 	while(get_count(list) != 0){
 		Box* room2 = pop_item(list);
 
-		int center1x = room1->x+room1->width*0.5;
-		int center1y = room1->y+room1->height*0.5;
+		int center1x = room1->x+(room1->width/2);
+		int center1y = room1->y+(room1->height/2);
 
-		int center2x = room2->x+room2->width*0.5;
-		int center2y = room2->y+room2->height*0.5;
+		int center2x = room2->x+(room2->width/2);
+		int center2y = room2->y+(room2->height/2);
 		int diffx = center1x - center2x;
 		int diffy = center1y - center2y;
 
 		if(room1->y <= room2->y && room1->y+room1->height >= room2->y){
 			// room2 is to the left or right of room1 and below room1 (+y)
-			int pathy = rand()%(room2->y-(room1->y+room1->height));
+			int range = room1->height+room1->y-room2->y;
+			int pathy = room2->y;
+			if(range != 0) pathy += rand()%range; // adds random modifier for path placement
 
 			// places path in tileMap
-			for (int i = center1x; i < center1x+diffx; ++i)
-				tileMap[pathy][i] = '.';
+			if(diffx > 0){
+				for (int i = center2x; i <= center1x+1; ++i)
+					tileMap[pathy][i] = '.';
+			}else{
+				for (int i = center1x; i <= center2x+1; ++i)
+					tileMap[pathy][i] = '.';
+			}
 		}else if (room1->y >= room2->y && room2->y+room2->height >= room1->y){
 			// room2 is to the left or right of room1 and above room1 (-y)
-			int pathy = rand()%((room2->y+room2->height)-room1->y);
+			int range = (room2->y+room2->height)-room1->y;
+			int pathy = room1->y;
+			if(range != 0) pathy += rand()%range;
+
 			// places path in tileMap
-			for (int i = center1x; i < center1x+diffx; ++i)
-				tileMap[pathy][i] = '.';
+			if(diffx > 0){
+				for (int i = center2x; i <= center1x+1; ++i)
+					tileMap[pathy][i] = '.';
+			}else{
+				for (int i = center1x; i <= center2x+1; ++i)
+					tileMap[pathy][i] = '.';
+			}
 		}else if(room1->x <= room2->x && room1->x+room1->width >= room2->x){
 			// room2 is up or down from room1 and to the right of room1 (+x)
-			int pathx = rand()%(room1->x+room1->width-room2->x);
+			int range = room1->width+room1->x-room2->x;
+			int pathx = room2->x;
+			if(range != 0) pathx += rand()%range;
 			// places path in tileMap
-			for (int i = center1y; i < center1y+diffy; ++i)
-				tileMap[i][pathx] = '.';
+			if(diffy > 0){
+				for (int i = center2y; i <= center1y+1; ++i)
+					tileMap[i][pathx] = '.';
+			}else{
+				for (int i = center1y; i <= center2y+1; ++i)
+					tileMap[i][pathx] = '.';
+			}
 		}else if(room1->x >= room2->x && room2->x+room2->width >= room1->x){
 			// room2 is up or down from room1 and to the left of room1 (+y)
-			int pathx = rand()%(room2->x+room2->width-room1->x);
+			int range = room2->width+room2->x-room1->x;
+			int pathx = room1->x;
+			if(range != 0) pathx += rand()%range;
 			// places path in tileMap
-			for (int i = center1y; i < center1y+diffy; ++i)
-				tileMap[i][pathx] = '.';
+			if(diffy > 0){
+				for (int i = center2y; i <= center1y+1; ++i)
+					tileMap[i][pathx] = '.';
+			}else{
+				for (int i = center1y; i <= center2y+1; ++i)
+					tileMap[i][pathx] = '.';
+			}
 		}
 		else{
+
 			// room2 is diagnal from room 1 hek
 			if(rand()%2) {
 				// will place vertical first
-				for (int i = center1y; i < center1y+diffy; ++i)
-					tileMap[i][center1y];
-				for (int i = center1y; i < center1y+diffy; ++i)
-					tileMap[center2y][i];
+				if(diffy > 0){
+					for (int i = center2y; i <= center1y; ++i)
+						tileMap[i][center1y] = '.';
+				}else{
+					for (int i = center1y; i <= center2y; ++i)
+						tileMap[i][center1y] = '.';
+				}
+
+				if(diffx > 0){
+					for (int i = center2x; i <= center1x; ++i)
+						tileMap[center2y][i] = '.';
+				}else{
+					for (int i = center1x; i <= center2x; ++i)
+						tileMap[center2y][i] = '.';
+				}
 			}else{
 				//will place horizontal first
-				for (int i = center1y; i < center1y+diffy; ++i)
-					tileMap[center2y][i];
-				for (int i = center1y; i < center1y+diffy; ++i)
-					tileMap[i][center1y];
+				if(diffx > 0){
+					for (int i = center2x; i <= center1x; ++i)
+						tileMap[center2y][i] = '.';
+				}else{
+					for (int i = center1x; i <= center2x; ++i)
+						tileMap[center2y][i] = '.';
+				}
+
+				if(diffy > 0){
+					for (int i = center2y; i <= center1y; ++i)
+						tileMap[i][center1y] = '.';
+				}else{
+					for (int i = center1y; i <= center2y; ++i)
+						tileMap[i][center1y] = '.';
+				}
+
 			}
 		}
 		room1 = room2;
 	}
-	*/
+
 	free_LinkedList(q);
 	free_LinkedList(list);
 

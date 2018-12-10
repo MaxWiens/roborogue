@@ -39,6 +39,7 @@ int main(int argc, char const *argv[])
 			mvwprintw(win,y,x, "%c", tileMap[y][x]);
 			wrefresh(win);
 		}
+
 	}
 	//end debug
 
