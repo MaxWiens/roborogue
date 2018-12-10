@@ -6,7 +6,7 @@
 #include "square.h"
 
 
-#define DUNGEON_HEIGHT 20
+#define DUNGEON_HEIGHT 25
 #define DUNGEON_WIDTH 100
 
 

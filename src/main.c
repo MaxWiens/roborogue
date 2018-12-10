@@ -181,8 +181,8 @@ int main(int argc, char const *argv[])
 
 	for (int y = 0; y < DUNGEON_HEIGHT; ++y) {
 		for (int x = 0; x < DUNGEON_WIDTH; ++x) {
-			mvwprintw(win,y,x, "%c", arr[y][x]);
-			wrefresh(win);
+			mvwprintw(dungeon_win,y,x, "%c", arr[y][x]);
+			wrefresh(dungeon_win);
 		}
 	}
 	//end debug
